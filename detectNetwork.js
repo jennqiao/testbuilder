@@ -17,10 +17,10 @@ var detectNetwork = function(cardNumber) {
   var length = cardNumber.length;
   var prefix = cardNumber.slice(0,2);
 
-  if (length==14 && (prefix == "38" || prefix == "39")) {
+  if (isDiners(cardNumber)) {
   	return "Diner's Club";
   }
-  else if (length==15 && (prefix == "34" || prefix == "37")) {
+  else if (isAmerican(cardNumber)) {
   	return 'American Express';
   }
   else if (isVisa(cardNumber)) {
@@ -41,14 +41,40 @@ var detectNetwork = function(cardNumber) {
   return trueCard[0];
 };
 
+function isDiners(cardNumber) {
+	var prefix = parseInt(cardNumber.slice(0,2));
+
+	if(cardNumber.length === 14) {
+		if (prefix===38 || prefix===39) {
+			return true;
+		}
+
+	}
+	return false;
+}
+
+function isAmerican(cardNumber) {
+
+	var prefix = parseInt(cardNumber.slice(0,2));
+
+	if(cardNumber.length === 15) {
+		if(prefix===34 || prefix===37) {
+			return true;
+		}
+
+	}
+	return false;
+}
+
+
 
 function isVisa(cardNumber) {
 
-  var prefix = cardNumber.slice(0,1);	
+  var prefixString = cardNumber.slice(0,1);	
 
-  if (parseInt(prefix)===4) {
+  if (parseInt(prefixString)===4) {
   	if (cardNumber.length == 13 || cardNumber.length ==16 || cardNumber.length ==19) {
-  		return ['Visa', prefix];
+  		return ['Visa', prefixString];
   	}
 
 }
