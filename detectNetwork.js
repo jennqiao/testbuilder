@@ -13,6 +13,116 @@ var detectNetwork = function(cardNumber) {
   // The American Express network always starts with a 34 or 37 and is 15 digits long
 
   // Once you've read this, go ahead and try to implement this function, then return to the console.
+  var trueCard = [];
+  var length = cardNumber.length;
+  var prefix = cardNumber.slice(0,2);
+
+  if (length==14 && (prefix == "38" || prefix == "39")) {
+  	return "Diner's Club";
+  }
+  else if (length==15 && (prefix == "34" || prefix == "37")) {
+  	return 'American Express';
+  }
+  else if (isVisa(cardNumber)) {
+  	trueCard = isVisa(cardNumber);
+  }
+  else if (isMastercard(cardNumber)) {
+  	return 'MasterCard';
+  }
+  else if (isDiscover(cardNumber)) {
+  	return 'Discover';
+  }
+  else if (isMaestro(cardNumber)) {
+  	return 'Maestro';
+  }
+  else if (isUnionPay(cardNumber)) {
+  	return 'China UnionPay';
+  }
+  return trueCard[0];
 };
 
 
+function isVisa(cardNumber) {
+
+  var prefix = cardNumber.slice(0,1);	
+
+  if (parseInt(prefix)===4) {
+  	if (cardNumber.length == 13 || cardNumber.length ==16 || cardNumber.length ==19) {
+  		return ['Visa', prefix];
+  	}
+
+}
+return false;
+}
+
+
+function isMastercard(cardNumber) {
+
+  var prefix = parseInt(cardNumber.slice(0,2));
+
+  if (cardNumber.length==16) {
+  	if (prefix > 50 && prefix < 56) {
+  		return true;
+  	}
+
+}
+return false;
+}
+
+
+function isDiscover(cardNumber) {
+ //Discover always has a prefix of 6011, 644-649, or 65, and a length of 16 or 19.
+
+  var prefixFour = parseInt(cardNumber.slice(0,4));
+  var prefixThree = parseInt(cardNumber.slice(0,3));
+  var prefixTwo = parseInt(cardNumber.slice(0,2));
+
+  if (cardNumber.length===16 || cardNumber.length===19) {
+  	if (prefixFour===6011 || (prefixThree > 643 && prefixThree <650) || prefixTwo===65) {
+  		return true;
+  	}
+
+  }
+  return false;
+
+}
+
+function isMaestro(cardNumber) {
+//Maestro always has a prefix of 5018, 5020, 5038, or 6304, and a length of 12-19.
+
+  var prefixFour = parseInt(cardNumber.slice(0,4));
+
+  if (cardNumber.length > 11 && cardNumber.length < 20) {
+  	if (prefixFour===5018 || prefixFour===5020 || prefixFour===5038 || prefixFour===6304) {
+  		return true;
+  	}
+  }
+  return false;
+
+}
+
+function isUnionPay(cardNumber){
+	var prefixSix = parseInt(cardNumber.slice(0,6));
+	var prefixThree = parseInt(cardNumber.slice(0,3));
+	var prefixFour = parseInt(cardNumber.slice(0,4));
+
+	if (cardNumber.length > 15 && cardNumber.length<20) {
+		if ((prefixSix > 622125 && prefixSix <622926) || (prefixThree > 623 && prefixThree <627) || (prefixFour > 6281 && prefixFour <6289)) {
+			return true;
+		}
+
+	}
+	return false;
+
+}
+/*
+
+China UnionPay always has a prefix of 622126-622925, 624-626, or 6282-6288 and a length of 16-19.
+Switch always has a prefix of 4903, 4905, 4911, 4936, 564182, 633110, 6333, or 6759 and a length of 16, 18, or 19.
+
+Heads up! Switch and Visa seem to have some overlapping card numbers - in any apparent conflict, you should choose the network with the longer prefix.
+
+Visa always has a prefix of 4 and a length of 13, 16, or 19.
+MasterCard always has a prefix of 51, 52, 53, 54, or 55 and a length of 16.
+
+*/
