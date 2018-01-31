@@ -285,6 +285,8 @@ describe('Maestro', function() {
 
 });
 
+
+
 describe('should support China UnionPay', function() {
 //China UnionPay always has a prefix of 622126-622925, 624-626, or 6282-6288 and a length of 16-19.
 
@@ -349,7 +351,57 @@ describe('should support China UnionPay', function() {
 });
 
 
+//describe('should support Switch')
 
-describe('should support Switch')
-//Switch always has a prefix of 4903, 4905, 4911, 4936, 564182, 633110, 6333, or 6759 and a length of 16, 18, or 19.
+
+
+describe('should support Switch', function() {
+  //Switch always has a prefix of 4903, 4905, 4911, 4936, 564182, 633110, 6333, or 6759 
+  //and a length of 16, 18, or 19.
+
+  var should = chai.should();
+
+  var arrayPrefix = [4903, 4905, 4911, 4936, 564182, 633110, 6333,6759].toString().split(",");
+
+  for (var i=0;i<arrayPrefix.length; i++) {
+
+    if (arrayPrefix[i].length===4){
+    (function(prefix) {
+
+      it('has a prefix of '+prefix+' and a length of 16', function () {
+        detectNetwork(prefix+'567890123456').should.equal('Switch')
+      });
+      it('has a prefix of '+prefix+' and a length of 18', function () {
+        detectNetwork(prefix+'56789012345678').should.equal('Switch')
+      });
+      it('has a prefix of '+prefix+' and a length of 19', function () {
+        detectNetwork(prefix+'567890123456789').should.equal('Switch')
+      });
+
+    })(arrayPrefix[i])
+
+    }
+
+    if (arrayPrefix[i].length===6){
+    (function(prefix) {
+
+      it('has a prefix of '+prefix+' and a length of 16', function () {
+        detectNetwork(prefix+'7890123456').should.equal('Switch')
+      });
+      it('has a prefix of '+prefix+' and a length of 18', function () {
+        detectNetwork(prefix+'789012345678').should.equal('Switch')
+      });
+      it('has a prefix of '+prefix+' and a length of 19', function () {
+        detectNetwork(prefix+'7890123456789').should.equal('Switch')
+      });
+
+    })(arrayPrefix[i])
+
+    }
+
+
+  }
+
+});
+
 

@@ -14,29 +14,39 @@ var detectNetwork = function(cardNumber) {
 
   // Once you've read this, go ahead and try to implement this function, then return to the console.
   var trueCard = [];
-  var length = cardNumber.length;
-  var prefix = cardNumber.slice(0,2);
 
   if (isDiners(cardNumber)) {
   	return "Diner's Club";
   }
-  else if (isAmerican(cardNumber)) {
+  if (isAmerican(cardNumber)) {
   	return 'American Express';
   }
-  else if (isVisa(cardNumber)) {
+  if (isVisa(cardNumber)) {
   	trueCard = isVisa(cardNumber);
   }
-  else if (isMastercard(cardNumber)) {
+  if (isMastercard(cardNumber)) {
   	return 'MasterCard';
   }
-  else if (isDiscover(cardNumber)) {
+  if (isDiscover(cardNumber)) {
   	return 'Discover';
   }
-  else if (isMaestro(cardNumber)) {
+  if (isMaestro(cardNumber)) {
   	return 'Maestro';
   }
-  else if (isUnionPay(cardNumber)) {
+  if (isUnionPay(cardNumber)) {
   	return 'China UnionPay';
+  }
+  if (isSwitch(cardNumber)) {
+  	if (trueCard.length > 0) {
+  		var potentialCard = isSwitch(cardNumber);
+  		if (potentialCard[1].length > trueCard[1].length) {
+  			trueCard = potentialCard;
+  		}
+  	}
+  	else {
+  		trueCard = isSwitch(cardNumber);
+  	}
+
   }
   return trueCard[0];
 };
@@ -137,6 +147,36 @@ function isUnionPay(cardNumber){
 			return true;
 		}
 
+	}
+	return false;
+
+}
+
+function isSwitch(cardNumber) {
+
+	//create array of lengths
+	//create array of prefixes
+	//for each item i length array, check if cardnumber is that length
+	//if so, for each item in prefix array, check if the cardNumber's digits match that 
+	//if so, return array of Switch, with that prefix that matched
+
+	var arrayLengths = [16,18,19];
+	var arrayPrefix = [4903, 4905, 4911, 4936, 564182, 633110, 6333, 6759];
+
+	for (var i=0; i<arrayLengths.length; i++) {
+
+		if (cardNumber.length===arrayLengths[i]) {
+
+			for (var z=0; z<arrayPrefix.length; z++) {
+
+				var prefix = arrayPrefix[z].toString();
+				var slicedNum = cardNumber.slice(0,prefix.length);
+				if (slicedNum===prefix) {
+					return ['Switch', ''+prefix];
+				}
+			}
+
+		}
 	}
 	return false;
 
